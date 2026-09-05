@@ -3,7 +3,6 @@ const express = require('express');
 const routes = require('./routes');
 const path = require('path');
 const helmet = require('helmet');
-const { csrfSync } = require('csrf-sync');
 const { checkRouteError, csrfMiddleware } = require('./src/middlewares/middleware');
 const mongoose = require('mongoose');
 const session = require('express-session');
@@ -13,7 +12,7 @@ const flash = require('connect-flash');
 
 const app = express();
 const curDir = path.resolve(__dirname);
-const { csrfSynchronisedProtection } = csrfSync();
+const { csrfSynchronisedProtection } = require('./src/middlewares/csrfMiddleware');
 
 
 mongoose.connect(process.env.CONNECTIONSTRING)

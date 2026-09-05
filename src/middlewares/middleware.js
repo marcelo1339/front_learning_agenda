@@ -1,9 +1,8 @@
-const { csrfSync } = require('csrf-sync');
-const { generateToken } = csrfSync();
+const { generateToken } = require('./csrfMiddleware');
 
 exports.checkRouteError = (err, req, res, next) => {
     if (err) {
-        console.log(`Não achei a rota ${req.url}`)
+        console.log(`erro -> ${err.code}\nMessage -> "${err.message}"`);
         return res.render('404');
     }
 
