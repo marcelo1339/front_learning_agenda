@@ -13,3 +13,10 @@ exports.csrfMiddleware = (req, res, next) => {
     res.locals.csrfToken = generateToken(req);
     next();
 }
+
+exports.globalMessages = (req, res, next) => {
+    // Capturando erros e mensagens salvos na sessão
+    res.locals.errors = req.flash('errors');
+    res.locals.success = req.flash('success');
+    next();
+}
