@@ -29,13 +29,8 @@ class Login {
         const salt = bcriptjs.genSaltSync();
         this.body.senha = bcriptjs.hashSync(this.body.senha, salt);    
 
+        this.user = await LoginModel.create(this.body);
 
-        try {
-            this.user = await LoginModel.create(this.body);
-        }
-        catch (e) {
-            console.log(`Erro ao criar usuário -> ${e}`);
-        }
     }
 
     async userExists() {
