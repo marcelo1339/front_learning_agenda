@@ -33,3 +33,30 @@ exports.register = async (req, res) => {
         res.redirect('/login/index');
     });
 }
+
+exports.login = async (req, res) => {
+    const login = new Login(req.body);
+    await login.login();
+
+    if (login.loginFormHasErrors()) {
+        req.flash('errors', login.errors);
+        req.session.save(function () {
+            return res.redirect('/login/index');
+        });
+        
+        return;
+    }
+    
+    req.session.user = login.user;
+    req.flash('success', 'Você entrou no sistema.');
+
+    req.session.save(function () {
+        return res.redirect('/');
+    });
+
+}
+
+exports.logout = function (req, res) {
+    req.session.destroy();
+    res.redirect('/');
+}
