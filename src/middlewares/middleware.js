@@ -20,3 +20,8 @@ exports.globalMessages = (req, res, next) => {
     res.locals.success = req.flash('success');
     next();
 }
+
+exports.userActiveMiddleWare = (req, res, next) => {
+    res.locals.user = req.session.user;
+    next();
+}
