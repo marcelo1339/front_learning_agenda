@@ -1,7 +1,7 @@
 const Contato = require('../models/ContatoModel');
 
 exports.index = (req, res) => {
-    res.render('../views/contato');
+    res.render('../views/contato', {contato: {}});
     return;
 };
 
@@ -21,7 +21,7 @@ exports.register = async (req, res) => {
 
         req.flash('success', 'Contato cadastrado!');
         req.session.save(function () {
-            res.redirect('/contato/index');
+            res.redirect(`/contato/index/${contato.contato._id}`);
         });
 
     } catch (e) {
@@ -29,3 +29,18 @@ exports.register = async (req, res) => {
         return res.render('404');
     }
 };
+
+exports.editContact = async function (req, res) {
+    if (!req.params.id) return res.render('404'); 
+
+    const contato = await Contato.buscaPorId(req.params.id);
+    
+    if (!contato) {
+        res.render('404');
+    }
+    
+    res.render('contato', {
+        contato: contato
+    });
+
+}
