@@ -19,13 +19,13 @@ function Contato(body) {
 
 Contato.prototype.register = async function () {
     this.valida();
-
+    await this.contactExists();
     if (this.contactFormHasErrors()) return;
 
     this.contato = await ContatoModel.create(this.body);
 }
 
-Contato.prototype.userExists = async function () {
+Contato.prototype.contactExists = async function () {
     const findUser = await ContatoModel.findOne({
         $or: [
             { email: this.body.email },
@@ -36,8 +36,6 @@ Contato.prototype.userExists = async function () {
     if (findUser) {
         this.errors.push('E-mail e/ou telefone já cadastrado(s) na base.');
     };
-
-    return findUser;
 }
     
 Contato.prototype.contactFormHasErrors = function () {
@@ -74,6 +72,12 @@ Contato.prototype.cleanUp = function (){
         email: this.body.email,
         telefone: this.body.telefone
     }
+}
+
+Contato.buscaPorId = async function (id) {
+    if (typeof id !== 'string') return;
+    const user = await ContatoModel.findById(id)
+    return user;
 }
 
 module.exports = Contato;
