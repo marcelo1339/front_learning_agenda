@@ -30,7 +30,7 @@ exports.register = async (req, res) => {
     }
 };
 
-exports.editContact = async function (req, res) {
+exports.editIndex = async function (req, res) {
     if (!req.params.id) return res.render('404'); 
 
     const contato = await Contato.buscaPorId(req.params.id);
@@ -42,5 +42,32 @@ exports.editContact = async function (req, res) {
     res.render('contato', {
         contato: contato
     });
+
+}
+
+exports.editContact = async function (req, res) {
+    if (!req.params.id) return res.render('404'); 
+    try {
+
+        const contato = new Contato(req.body);
+        await contato.edit(req.params.id);
+    
+        if (contato.contactFormHasErrors()) {
+            req.flash('errors', contato.errors);
+            req.session.save(function () {
+                res.redirect('/contato/index');
+            });
+            return;
+        }
+    
+        req.flash('success', 'Contato atualizado!');
+        req.session.save(function () {
+            res.redirect(`/contato/index/${contato.contato._id}`);
+        });
+
+    } catch (e) {
+        console.log(e);
+        return res.render('404');
+    }
 
 }
