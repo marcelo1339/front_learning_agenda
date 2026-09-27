@@ -74,21 +74,30 @@ Contato.prototype.cleanUp = function (){
     }
 }
 
+Contato.prototype.edit = async function (id) {
+    if (typeof id !== 'string') return;
+    
+    this.valida();
+    
+    if (this.contactFormHasErrors()) return;
+    
+    this.contato = await ContatoModel.findByIdAndUpdate(id, this.body, { returnDocument: 'after' });
+    
+}
+
 Contato.buscaPorId = async function (id) {
     if (typeof id !== 'string') return;
     const user = await ContatoModel.findById(id)
     return user;
 }
 
-Contato.prototype.edit = async function (id) {
-    if (typeof id !== 'string') return;
+Contato.buscaContatos = async function () {
+    const contatos = await ContatoModel.find().sort({criadoEm: 'asc'});
+    return contatos;
+}
 
-    this.valida();
-
-    if (this.contactFormHasErrors()) return;
-
-    this.contato = await ContatoModel.findByIdAndUpdate(id, this.body, { returnDocument: 'after' });
-    
+Contato.deleteContato = async function (id) {
+    await ContatoModel.deleteOne({ _id: id });
 }
 
 module.exports = Contato;
