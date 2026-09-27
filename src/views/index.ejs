@@ -10,29 +10,24 @@
             </div>
             
             <%- include("./includes/messages") %>
-
-            <div class="responsive-table">
-                <table class="table my-3 mx-auto">
-                    <tr>
-                        <td>Marcelo</td>
-                        <td>Amaral</td>
-                        <td>12345678910</td>
-                        <td>marcelo@email.com</td>
-                    </tr>
-                    <tr>
-                        <td>Marcelo</td>
-                        <td>Amaral</td>
-                        <td>12345678910</td>
-                        <td>marcelo@email.com</td>
-                    </tr>
-                    <tr>
-                        <td>Marcelo</td>
-                        <td>Amaral</td>
-                        <td>12345678910</td>
-                        <td>marcelo@email.com</td>
-                    </tr>
-                </table>
-            </div>
+            <% if(contatos.length > 0) { %>
+                <div class="responsive-table">
+                    <table class="table my-3 mx-auto">
+                        <% for(let contato of contatos){ %>
+                            <tr>
+                                <td><%= contato.nome %></td>
+                                <td><%= contato.sobrenome || '-' %></td>
+                                <td><%= contato.telefone || '-' %></td>
+                                <td><%= contato.email || '-' %></td>
+                                <td><a href="contato/index/<%= contato._id %>">Editar</a></td>
+                                <td><a class="text-danger" href="contato/delete/<%= contato._id %>">Excluir</a></td>
+                            </tr>
+                        <% } %>
+                    </table>
+                </div>
+            <% } else { %>
+                <p class="text-center lead">Sem contatos para exibir</p>
+            <% } %>
 
             <div class="col-lg-2"></div>
         </div>
