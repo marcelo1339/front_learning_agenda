@@ -71,3 +71,14 @@ exports.editContact = async function (req, res) {
     }
 
 }
+
+exports.deleteContact = async (req, res) => {
+    if (!req.params.id) return res.render('404');
+
+    await Contato.deleteContato(req.params.id);
+
+    req.flash('success', 'Contato apagado com sucesso');
+    req.session.save(() => {
+        res.redirect('/');
+    })
+}
