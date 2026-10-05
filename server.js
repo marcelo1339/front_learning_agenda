@@ -3,8 +3,7 @@ const express = require('express');
 const routes = require('./routes');
 const path = require('path');
 const helmet = require('helmet');
-const { csrfSync } = require('csrf-sync');
-const { checkCsrfError, csrfMiddleware } = require('./src/middlewares/middleware');
+const { checkRouteError, csrfMiddleware, globalMessages, userActiveMiddleWare } = require('./src/middlewares/middleware');
 const mongoose = require('mongoose');
 const session = require('express-session');
 const { MongoStore } = require('connect-mongo');
@@ -13,7 +12,7 @@ const flash = require('connect-flash');
 
 const app = express();
 const curDir = path.resolve(__dirname);
-const { csrfSynchronisedProtection } = csrfSync();
+const { csrfSynchronisedProtection } = require('./src/middlewares/csrfMiddleware');
 
 
 mongoose.connect(process.env.CONNECTIONSTRING)
@@ -51,7 +50,9 @@ app.use(flash());
 
 app.use(csrfSynchronisedProtection);
 app.use(csrfMiddleware);
-app.use(checkCsrfError);
+app.use(checkRouteError);
+app.use(globalMessages);
+app.use(userActiveMiddleWare);
 app.use(routes);
 
 
